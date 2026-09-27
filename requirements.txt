@@ -1,0 +1,12 @@
+# Compatibility-focused local environment for QNP + Training-Free Quantum.
+# Keep NumPy on the 1.x line because the original QNP/SigPy code expects it.
+numpy==1.26.4
+scipy>=1.11,<1.15
+h5py>=3.10,<4
+sigpy>=0.1.26,<0.2
+scikit-image>=0.22,<0.26
+matplotlib>=3.8,<3.10
+pennylane>=0.38,<0.44
+Flask>=3.0,<4
+PyWavelets>=1.5,<2
+tqdm>=4.66,<5

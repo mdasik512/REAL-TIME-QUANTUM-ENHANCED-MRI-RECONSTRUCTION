@@ -1,0 +1,14 @@
+Third-party QNP source notice
+=============================
+
+The runtime QNP Wavelet+TV functions vendored in run_native_fastmri_qnp.py are
+based on the public CQNPCS_MRIReco implementation by Tao Hong, Luis
+Hernandez-Garcia, and Jeffrey A. Fessler:
+
+  https://github.com/hongtao-argmin/CQNPCS_MRIReco
+
+The upstream repository is distributed under the Apache License 2.0. A copy of
+that license is included as THIRD_PARTY_QNP_APACHE_2_LICENSE.txt.
+
+This single-folder packaging omits unrelated upstream demo algorithms/data and
+keeps the runtime functions needed by the native Cartesian QNP workflow.

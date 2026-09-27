@@ -1,0 +1,114 @@
+QNP + TRAINING-FREE QUANTUM MRI OBSERVATORY
+================================================
+
+THIS PACKAGE IS ONE PROJECT FOLDER.
+There is no React/Vite/npm frontend to start separately.
+The HTML, CSS and JavaScript interface are embedded inside app.py.
+
+FILES
+-----
+app.py
+    Flask API + upload/job/result endpoints + embedded rare-design frontend
+    + result PNG/metric generation + real backend timing.
+
+run_native_fastmri_qnp.py
+    Native fastMRI Cartesian QNP reconstruction. The runtime-required QNP
+    Wavelet+TV core is vendored locally from the public Apache-2.0
+    CQNPCS_MRIReco implementation, so no separate upstream/ folder is needed.
+
+training_free_quantum_refiner.py
+    Fixed training-free quantum post-reconstruction spatial controller.
+
+requirements.txt
+    Python dependencies. NumPy is pinned to 1.26.4 for compatibility.
+
+FIRST RUN (WINDOWS POWERSHELL)
+------------------------------
+1. Open PowerShell in this extracted folder.
+2. Run:
+
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   .\INSTALL_AND_RUN.ps1
+
+3. Wait for the dependencies to install.
+4. Open:
+
+   http://127.0.0.1:8080
+
+LATER RUNS
+----------
+PowerShell:
+
+   .\RUN_APP.ps1
+
+or double-click:
+
+   RUN_APP.bat
+
+NO NODE / NPM
+-------------
+Do not run npm install.
+Do not run npm run dev.
+Do not open localhost:5173.
+This package uses one local Flask server on 127.0.0.1:8080.
+
+INPUT
+-----
+Use a fastMRI-style multicoil .h5/.hdf5 file containing a kspace dataset.
+
+PIPELINE
+--------
+Raw multicoil k-space
+ -> native Cartesian undersampling
+ -> ESPIRiT sensitivity estimation
+ -> Cartesian SENSE forward model
+ -> QNP Wavelet + L1-TV reconstruction
+ -> fixed training-free quantum enhancement
+ -> PSNR / SSIM / NMSE / images / timing / result ZIP
+
+RESULT IMAGES
+-------------
+The page uses same-origin Flask asset URLs, avoiding React/Vite proxy and state
+issues that previously caused MRI images to appear only during refresh.
+
+TIMING
+------
+New jobs save real measured values in result.json:
+- total_seconds
+- qnp_seconds
+- quantum_seconds
+
+LOCAL EXECUTION
+---------------
+Normal reconstruction is local. The website has no CDN dependency and does not
+fetch reconstruction code from the internet at runtime. Internet is normally
+needed only once to install Python packages with pip.
+
+RESEARCH NOTE
+-------------
+QNP performs the MRI inverse reconstruction. The quantum stage is a fixed,
+training-free post-reconstruction spatial controller. PennyLane default.qubit is
+used as a local classical simulator of the quantum circuit.
+
+DISCLAIMER
+----------
+This system evaluates MRI reconstruction quality. Medical interpretation should
+be performed by a qualified clinician.
+
+
+DEMO UI PROTOCOL
+----------------
+Only Slice is adjustable in the web interface.
+Acceleration is fixed at 2x. QNP outer/inner iterations are fixed at 20/15.
+ACS=24, wavelet lambda=0.0001, TV beta=0.0005.
+Result images are displayed large inline; there is no click-to-expand viewer.
+User-facing labels use Quantum (no V11 label).
+
+DISPLAY NOTE
+------------
+The Results page intentionally shows only two MRI images:
+- Ground Truth
+- Final Reconstruction
+
+Both are fitted fully inside the browser result area with no click-to-expand viewer.
+QNP and error-map arrays/images can still be generated internally for scientific processing, but they are not shown in the normal Results image gallery.
